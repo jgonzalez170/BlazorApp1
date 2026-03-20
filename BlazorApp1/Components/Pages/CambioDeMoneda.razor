@@ -1,0 +1,42 @@
+﻿@page "/CambioDeMoneda"
+@rendermode InteractiveServer
+
+<h1>Cambio de moneda</h1>
+
+<label>Pesos</label><br />
+<input type="number" @bind="pesos" @bind:event="oninput" min="0" /><br /><br />
+
+<button type="button" @onclick="CalcularCambio">Calcular cambio</button><br /><br />
+
+<label>Dólares</label><br />
+<input readonly value="@dolares" /><br /><br />
+
+<label>Euros</label><br />
+<input readonly value="@euros" /><br /><br />
+
+<label>Libras</label><br />
+<input readonly value="@libras" /><br />
+
+@code {
+    private int pesos = 0;
+
+    private double valorDolar = 0.056;
+    private double valorEuro = 0.049;
+    private double valorLibra = 0.042;
+
+    private string dolares = "0";
+    private string euros = "0";
+    private string libras = "0";
+
+    private void CalcularCambio()
+    {
+        if (pesos < 0) pesos = 0;
+        double d = pesos * valorDolar;
+        double e = pesos * valorEuro;
+        double l = pesos * valorLibra;
+
+        dolares = d.ToString("F2");
+        euros = e.ToString("F2");
+        libras = l.ToString("F2");
+    }
+}
