@@ -1,0 +1,35 @@
+﻿<h3>EstadoSistema2</h3>
+<div class="@_class">
+    <p>@_letrero</p>
+</div>
+@code {
+    [Parameter]
+    public int CodigoEstado
+    {
+        get; set;
+    }
+    private string _class = "alert alert-dark";
+    private string _letrero = "Estado desconocido";
+    protected override void OnParametersSet()
+    {
+        switch (CodigoEstado)
+        {
+            case 200:
+                _class = "";
+                _letrero = "";
+                break;
+            case 404:
+                _class = "";
+                _letrero = "";
+                break;
+            case 500:
+                _class = "";
+                _letrero = "";
+                break;
+            default:
+                _class = "";
+                _letrero = "";
+                break;
+        }
+    }
+}

@@ -1,0 +1,105 @@
+﻿@page "/Formulario"
+@rendermode InteractiveServer
+
+<h1>Formulario</h1>
+
+<label>Nombre</label>
+<br />
+<input @bind="nombre" />
+<br />
+<br />
+
+<label>Edad</label>
+<br />
+<input type="number" @bind="edad" @bind:event="oninput" min="0" />
+<br />
+<br />
+
+<label>Calificación (0-10)</label>
+<br />
+<input type="number" @bind="calificacion" @bind:event="oninput" min="0" max="10" />
+<br />
+<br />
+
+<button type="button" @onclick="Saludar">Saludar</button>
+
+@if (!string.IsNullOrEmpty(mensaje))
+{
+    <p>@mensaje</p>
+}
+
+@code {
+    private string nombre = "";
+    public int edad = 0;
+    private int calificacion = 0;
+
+    private string mensaje = "";
+
+    private void Saludar()
+    {
+        string letra = ConvertirCalifALetra(calificacion);
+
+        string mayorEdadTexto;
+        if (edad >= 18)
+        {
+            mayorEdadTexto = "eres mayor de edad";
+        }
+        else
+        {
+            mayorEdadTexto = "eres menor de edad";
+        }
+
+        var nombreMostrar = string.IsNullOrWhiteSpace(nombre) ? "amigo" : nombre;
+        mensaje = $"Hola {nombreMostrar}, tienes {edad} años ({mayorEdadTexto}) y tu calificación es {letra}";
+    }
+
+  /*  private string ConvertirCalifALetra(int calif)
+    {
+        if (calif >= 9) // 9 y 10 -> A
+        {
+            return "A";
+        }
+        else if (calif == 8)
+        {
+            return "B";
+        }
+        else if (calif == 7)
+        {
+            return "C";
+        }
+        else if (calif == 6)
+        {
+            return "D";
+        }
+        else
+        {
+            return "F";
+        }
+      }*/
+    private string ConvertirCalifALetra(int calif)
+    {
+        // Usando switch para los valores 6-10
+        switch (calif)
+        {
+            case 10:
+            case 9:
+                return "A";
+            case 8:
+                return "B";
+            case 7:
+                return "C";
+            case 6:
+                return "D";
+            default:
+                return "F";
+        }
+
+      
+    }
+
+    }
+@if(edad >= 18)
+{
+    //Motstrar un letrero de un color con los resultados del saludo y si es menor de otro color
+    // se debe mostrar el @letrero, @letreroEdad y @letreroCalificacion, lo unico que cambia es el color dependiendo la edad
+}

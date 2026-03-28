@@ -1,0 +1,55 @@
+﻿@page "/DiasDelMes"
+@rendermode InteractiveServer
+
+<h1>Conocer los días del mes</h1>
+
+<label>Mes</label><br />
+<input type="number" @bind="mes" @bind:event="oninput" min="1" max="12" /><br /><br />
+
+<label>Año</label><br />
+<input type="number" @bind="anio" @bind:event="oninput" min="1" /><br /><br />
+
+<button type="button" @onclick="MostrarDias">Calcular</button>
+
+@if (!string.IsNullOrEmpty(resultado))
+{
+    <h3>@resultado</h3>
+}
+
+@code {
+    private int mes = 1;
+    private int anio = 2000;
+    private string resultado = "";
+
+    private void MostrarDias()
+    {
+        if (mes < 1 || mes > 12)
+        {
+            resultado = "Mes inválido. Debe ser un número entre 1 y 12.";
+            return;
+        }
+        if (anio < 1)
+        {
+            resultado = "Año inválido. Debe ser un número positivo.";
+            return;
+        }
+
+        bool esBisiesto = (anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0);
+
+        int dias;
+        if (mes == 2)
+        {
+            dias = esBisiesto ? 29 : 28;
+        }
+        else if (mes == 4 || mes == 6 || mes == 9 || mes == 11)
+        {
+            dias = 30;
+        }
+        else
+        {
+            dias = 31;
+        }
+
+        resultado = $"El mes {mes} del año {anio} tiene {dias} días";
+    }
+}

@@ -1,0 +1,31 @@
+﻿@page "/EstadoSistema"
+@rendermode InteractiveServer
+@if(CodigoEstado== 200)
+{
+    <div class="alert alert-success">
+        <p>Sistema operacional</p>
+    </div>
+}
+else if (CodigoEstado == 404)
+{
+    <div class="alert alert-warning">
+        <p>Recurso no encontrado</p>
+    </div>
+}
+else if (CodigoEstado == 500)
+{
+    <div class="alert alert-danger">
+        <p>Error interno en el SIStema</p>
+    </div>
+}
+else
+{
+    <div class="alert alert-dark">
+        <p>Estado desconocido</p>
+    </div>
+}
+@code {
+    [Parameter]
+    public int CodigoEstado { get; set; }
+
+}
