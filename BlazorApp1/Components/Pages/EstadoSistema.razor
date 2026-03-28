@@ -1,31 +1,33 @@
 ﻿@page "/EstadoSistema"
 @rendermode InteractiveServer
-@if(CodigoEstado== 200)
+
+@* Componente que muestra el estado según el código pasado en CodigoEstado *@
+@if (CodigoEstado == 200)
 {
     <div class="alert alert-success">
-        <p>Sistema operacional</p>
+        <p>Sistema Operacional</p>
     </div>
 }
 else if (CodigoEstado == 404)
 {
     <div class="alert alert-warning">
-        <p>Recurso no encontrado</p>
+        <p>Recurso No Encontrado</p>
     </div>
 }
 else if (CodigoEstado == 500)
 {
     <div class="alert alert-danger">
-        <p>Error interno en el SIStema</p>
+        <p>Error Interno del Servidor</p>
     </div>
 }
 else
 {
     <div class="alert alert-dark">
-        <p>Estado desconocido</p>
+        <p>Estado Desconocido</p>
     </div>
 }
+
 @code {
     [Parameter]
-    public int CodigoEstado { get; set; }
-
+    public int CodigoEstado { get; set; } = 0;
 }
