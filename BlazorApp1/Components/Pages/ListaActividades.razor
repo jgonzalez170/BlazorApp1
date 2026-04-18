@@ -1,0 +1,44 @@
+﻿@page "/ListaActividades"
+@rendermode InteractiveServer
+
+<h1>Lista de Actividades</h1>
+
+<label>Nueva actividad</label><br />
+<input @bind="nuevaActividad" /><br /><br />
+
+<button type="button" @onclick="AgregarActividad">Agregar</button>
+
+@if (actividades.Count == 0)
+{
+    <p>No hay actividades.</p>
+}
+else
+{
+    <ul>
+        @for (int i = 0; i < actividades.Count; i++)
+        {
+            var index = i;
+            <li>
+                @actividades[index]
+                <button type="button" @onclick="() => EliminarActividad(index)">Eliminar</button>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private string nuevaActividad = "";
+    private List<string> actividades = new List<string>();
+
+    private void AgregarActividad()
+    {
+        actividades.Add(nuevaActividad);
+        nuevaActividad = "";
+    }
+
+    private void EliminarActividad(int index)
+    {
+        actividades.RemoveAt(index);
+    }
+}
+
