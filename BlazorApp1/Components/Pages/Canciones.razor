@@ -1,0 +1,118 @@
+﻿@page "/Canciones"
+@rendermode InteractiveServer
+
+<h1>Títulos de canciones</h1>
+
+<label>Nuevo título</label><br />
+<input @bind="nuevoTitulo" /><button type="button" @onclick="AgregarTitulo"> Agregar</button>
+<br /><br />
+
+<label>Filtro</label><br />
+<input placeholder="ej. summer" @bind="filtro" /><br /><br />
+
+<label>Orden</label><br />
+<button type="button" @onclick="() => SetOrden(true)">Ascendente</button>
+<button type="button" @onclick="() => SetOrden(false)">Descendente</button>
+<br /><br />
+
+<p>Lista (visible siempre):</p>
+
+@if (songs.Count == 0)
+{
+    <p>No hay títulos.</p>
+}
+else
+{
+    <ul>
+        @foreach (var item in ObtenerListadoMostrado())
+        {
+            var origIndex = item.Index;
+            var title = item.Title;
+            <li>
+                @if (editingIndex == origIndex)
+                {
+                    <input @bind="editingText" />
+                    <button type="button" @onclick="() => GuardarEdicion(origIndex)">Guardar</button>
+                    <button type="button" @onclick="CancelarEdicion">Cancelar</button>
+                }
+                else
+                {
+                    @title
+                    <button type="button" @onclick="() => IniciarEdicion(origIndex, title)">Editar</button>
+                    <button type="button" @onclick="() => EliminarTitulo(origIndex)">Eliminar</button>
+                }
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private string nuevoTitulo = "";
+    private List<string> songs = new List<string>();
+
+    private string filtro = "";
+    private bool ordenAscendente = true;
+
+    // Edición
+    private int editingIndex = -1;
+    private string editingText = "";
+
+    private void AgregarTitulo()
+    {
+        songs.Add(nuevoTitulo);
+        nuevoTitulo = "";
+    }
+
+    private void EliminarTitulo(int index)
+    {
+        songs.RemoveAt(index);
+        // Si estaba en edición, cancelar
+        if (editingIndex == index) CancelarEdicion();
+        // si la lista cambió y editingIndex ya no es válido, resetear
+        if (editingIndex >= songs.Count) editingIndex = -1;
+    }
+
+    private void IniciarEdicion(int index, string title)
+    {
+        editingIndex = index;
+        editingText = title;
+    }
+
+    private void GuardarEdicion(int index)
+    {
+        songs[index] = editingText;
+        editingIndex = -1;
+        editingText = "";
+    }
+
+    private void CancelarEdicion()
+    {
+        editingIndex = -1;
+        editingText = "";
+    }
+
+    private void SetOrden(bool asc)
+    {
+        ordenAscendente = asc;
+    }
+
+    // Devuelve lista con índice original y título, aplicada filtro y orden
+    private IEnumerable<(int Index, string Title)> ObtenerListadoMostrado()
+    {
+        var list = songs
+            .Select((t, i) => (Index: i, Title: t));
+
+        if (!string.IsNullOrWhiteSpace(filtro))
+        {
+            var f = filtro.ToLowerInvariant();
+            list = list.Where(x => (x.Title ?? "").ToLowerInvariant().Contains(f));
+        }
+
+        list = ordenAscendente
+            ? list.OrderBy(x => x.Title, StringComparer.InvariantCultureIgnoreCase)
+            : list.OrderByDescending(x => x.Title, StringComparer.InvariantCultureIgnoreCase);
+
+        return list;
+    }
+}
+
