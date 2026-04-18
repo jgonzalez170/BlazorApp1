@@ -1,0 +1,51 @@
+﻿@page "/Primos"
+@rendermode InteractiveServer
+
+<h1>Números primos</h1>
+
+<label>Ingrese un entero positivo</label><br />
+<input type="number" @bind="maxNumber" @bind:event="oninput" /><br /><br />
+
+<button type="button" @onclick="GenerarPrimos">Generar primos</button>
+
+@if (primos?.Count > 0)
+{
+    <p>Primos entre 1 y @maxNumber:</p>
+    <ul>
+        @foreach (var p in primos)
+        {
+            <li>@p</li>
+        }
+    </ul>
+}
+
+@code {
+    private int maxNumber = 1;
+    private List<int> primos = new();
+
+    private void GenerarPrimos()
+    {
+        primos = new List<int>();
+        for (int n = 2; n <= maxNumber; n++)
+        {
+            if (EsPrimo(n))
+            {
+                primos.Add(n);
+            }
+        }
+    }
+
+    private bool EsPrimo(int n)
+    {
+        if (n < 2) return false;
+        if (n == 2) return true;
+        if (n % 2 == 0) return false;
+
+        int limite = (int)Math.Sqrt(n);
+        for (int d = 3; d <= limite; d += 2)
+        {
+            if (n % d == 0) return false;
+        }
+        return true;
+    }
+}   
